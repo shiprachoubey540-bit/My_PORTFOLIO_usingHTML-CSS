@@ -732,7 +732,168 @@ a {
   font-weight: 400;
 }
 
-/* ── SLIDE 2: SKILLS & EXPERTISE ── */
+
+/* ── WORK HIGHLIGHTS (SUB-PAGE TABS & PROJECTS) ── */
+.work-tabs-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #FFFFFF;
+  padding: 0.35rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  margin-bottom: 2.2rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+}
+
+.work-tab-btn {
+  padding: 0.65rem 1.6rem;
+  font-size: 0.76rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+.work-tab-btn:hover {
+  color: var(--text-main);
+}
+
+.work-tab-btn.active {
+  background: #719F91;
+  color: #FFFFFF;
+  box-shadow: 0 2px 10px rgba(113, 159, 145, 0.3);
+}
+
+.work-tab-pane {
+  display: none;
+  animation: fadeInPane 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.work-tab-pane.active {
+  display: block;
+}
+
+@keyframes fadeInPane {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.project-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 2.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--transition);
+  position: relative;
+}
+
+.project-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.04);
+  transform: translateY(-3px);
+}
+
+.project-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.9rem;
+}
+
+.project-badge {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #719F91;
+  font-weight: 600;
+}
+
+.project-date {
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+  font-weight: 400;
+}
+
+.project-title {
+  font-family: var(--serif);
+  font-size: 1.48rem;
+  font-weight: 500;
+  line-height: 1.28;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+}
+
+.project-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.6rem;
+}
+
+.project-bullets li {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  position: relative;
+  padding-left: 1.3rem;
+  font-weight: 300;
+}
+
+.project-bullets li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: #719F91;
+  font-weight: 500;
+}
+
+.project-tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--border);
+}
+
+.ptech-tag {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+/* ── SLIDE 2: WORK HIGHLIGHTS ── */
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1233,7 +1394,7 @@ a {
       <ul class="nav-links">
         <li><button class="nav-item active" onclick="goToSlide(0)">Home</button></li>
         <li><button class="nav-item" onclick="goToSlide(1)">About</button></li>
-        <li><button class="nav-item" onclick="goToSlide(2)">Skills</button></li>
+        <li><button class="nav-item" onclick="goToSlide(2)">Work Highlights</button></li>
         <li><button class="nav-item" onclick="goToSlide(3)">Certificates</button></li>
         <li><button class="nav-item" onclick="goToSlide(4)">Awards</button></li>
         <li><button class="nav-item" onclick="goToSlide(5)">Contact</button></li>
@@ -1387,68 +1548,151 @@ a {
     </div>
   </section>
 
-  <!-- SLIDE 2: SKILLS & EXPERTISE -->
+  <!-- SLIDE 2: WORK HIGHLIGHTS -->
   <section class="slide-panel" id="slide-skills">
     <div class="slide-content">
       <div class="slide-header">
-        <span class="slide-num">02 / Competencies</span>
-        <h2 class="slide-title">Skills &amp; Expertise</h2>
-        <p class="slide-subtitle">A multidisciplinary computational and analytical repertoire built for modern biological inquiry and data intelligence.</p>
+        <span class="slide-num">02 / Portfolio &amp; Practice</span>
+        <h2 class="slide-title">Work Highlights</h2>
+        <p class="slide-subtitle">Applied engineering and deep learning projects in healthcare, computational chemistry, and multidisciplinary analytical competencies.</p>
       </div>
 
-      <div class="skills-grid">
-        <!-- Col 1 -->
-        <div class="skill-col">
-          <div class="skill-col-header">
-            <span class="skill-cat-num">02.1 &middot; Computational Biology</span>
-            <h3 class="skill-col-title">Bioinformatics</h3>
-          </div>
-          <div class="tags-cluster">
-            <span class="tag-item">Molecular Docking</span>
-            <span class="tag-item">AutoDock Vina</span>
-            <span class="tag-item">PyMOL</span>
-            <span class="tag-item">BLAST</span>
-            <span class="tag-item">ClustalW</span>
-            <span class="tag-item">Cytoscape</span>
-            <span class="tag-item">Biological Network Analysis</span>
-            <span class="tag-item">Genomics</span>
-            <span class="tag-item">Drug Discovery</span>
-            <span class="tag-item">Protein Modeling</span>
-          </div>
-        </div>
+      <!-- Sub-page Navigation Tabs -->
+      <div class="work-tabs-nav">
+        <button class="work-tab-btn active" data-tab="projects" onclick="switchWorkTab('projects')">Featured Projects</button>
+        <button class="work-tab-btn" data-tab="skills" onclick="switchWorkTab('skills')">Skills &amp; Technical Stack</button>
+      </div>
 
-        <!-- Col 2 -->
-        <div class="skill-col">
-          <div class="skill-col-header">
-            <span class="skill-cat-num">02.2 &middot; Algorithms &amp; Models</span>
-            <h3 class="skill-col-title">Machine Learning &amp; Code</h3>
+      <!-- Sub-page Tab 1: Featured Projects -->
+      <div class="work-tab-pane active" id="pane-projects">
+        <div class="projects-grid">
+          
+          <!-- Project 1: MedListen -->
+          <div class="project-card">
+            <div>
+              <div class="project-badge-row">
+                <span class="project-badge">Smart India Hackathon 2026</span>
+                <span class="project-date">Sept 2026</span>
+              </div>
+              <h3 class="project-title">MedListen &mdash; Smart OPD Patient Kiosk &amp; Dual Clinical Summary Platform</h3>
+              <ul class="project-bullets">
+                <li>Built an AI-driven healthcare kiosk that automates patient symptom intake and generates dual-perspective clinical summaries &mdash; a layman-friendly version and a classical Ayush Dashavidha Pariksha&ndash;based version.</li>
+                <li>Implemented a CPU-efficient classical-literature RAG engine, multilingual voice interaction (Hindi, Marathi, English), prescription OCR, and DPDP-compliant ABHA anonymization.</li>
+              </ul>
+            </div>
+            <div class="project-tech-tags">
+              <span class="ptech-tag">React</span>
+              <span class="ptech-tag">FastAPI</span>
+              <span class="ptech-tag">Groq (Llama-3.3-70B)</span>
+              <span class="ptech-tag">scikit-learn</span>
+              <span class="ptech-tag">RAG Engine</span>
+              <span class="ptech-tag">Prescription OCR</span>
+            </div>
           </div>
-          <div class="tags-cluster">
-            <span class="tag-item">Python</span>
-            <span class="tag-item">R Programming</span>
-            <span class="tag-item">Machine Learning</span>
-            <span class="tag-item">TinyML</span>
-            <span class="tag-item">TensorFlow</span>
-            <span class="tag-item">Pandas</span>
-            <span class="tag-item">NumPy</span>
-            <span class="tag-item">Statistical Data Analysis</span>
-            <span class="tag-item">Jupyter</span>
-          </div>
-        </div>
 
-        <!-- Col 3 -->
-        <div class="skill-col">
-          <div class="skill-col-header">
-            <span class="skill-cat-num">02.3 &middot; Infrastructure &amp; BI</span>
-            <h3 class="skill-col-title">Cloud &amp; Analytics Tools</h3>
+          <!-- Project 2: Neural ODE Breast Tumor Segmentation -->
+          <div class="project-card">
+            <div>
+              <div class="project-badge-row">
+                <span class="project-badge">Deep Learning &middot; Healthcare</span>
+                <span class="project-date">Feb 2026 &ndash; June 2026</span>
+              </div>
+              <h3 class="project-title">Attention-Guided Neural ODE Network for Breast Tumor Segmentation</h3>
+              <ul class="project-bullets">
+                <li>Applied deep learning to identify and precisely segment tumors in ultrasound medical images using continuous-depth attention-guided neural ODE architecture.</li>
+                <li>Enhanced feature continuity across depth while significantly refining delineation of complex boundary lesions with reduced parameter overhead.</li>
+              </ul>
+            </div>
+            <div class="project-tech-tags">
+              <span class="ptech-tag">PyTorch</span>
+              <span class="ptech-tag">Neural ODEs</span>
+              <span class="ptech-tag">Medical Imaging</span>
+              <span class="ptech-tag">Attention Mechanisms</span>
+              <span class="ptech-tag">Ultrasound Segmentation</span>
+            </div>
           </div>
-          <div class="tags-cluster">
-            <span class="tag-item">Google Cloud Platform</span>
-            <span class="tag-item">BigQuery</span>
-            <span class="tag-item">Data Analytics</span>
-            <span class="tag-item">Data Visualization</span>
-            <span class="tag-item">Git &amp; GitHub</span>
-            <span class="tag-item">Power BI</span>
+
+          <!-- Project 3: Computational Chemistry & Conformer Modeling -->
+          <div class="project-card">
+            <div>
+              <div class="project-badge-row">
+                <span class="project-badge">Computational Chemistry &middot; Docking</span>
+                <span class="project-date">Research Initiative</span>
+              </div>
+              <h3 class="project-title">Chemoinformatics &amp; Molecular Conformer Exploration</h3>
+              <ul class="project-bullets">
+                <li>Explored small-molecule conformational spaces, ligand geometry optimization, and protein&ndash;ligand binding affinity predictions for therapeutic candidate screening.</li>
+                <li>Integrated receptor modeling with AutoDock Vina, structural rendering via PyMOL, and chemical property profiling using RDKit computational descriptors.</li>
+              </ul>
+            </div>
+            <div class="project-tech-tags">
+              <span class="ptech-tag">AutoDock Vina</span>
+              <span class="ptech-tag">PyMOL</span>
+              <span class="ptech-tag">RDKit</span>
+              <span class="ptech-tag">Molecular Docking</span>
+              <span class="ptech-tag">Chemoinformatics</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Sub-page Tab 2: Skills & Expertise -->
+      <div class="work-tab-pane" id="pane-skills">
+        <div class="skills-grid">
+          <!-- Col 1 -->
+          <div class="skill-col">
+            <div class="skill-col-header">
+              <span class="skill-cat-num">02.1 &middot; Computational Biology</span>
+              <h3 class="skill-col-title">Bioinformatics</h3>
+            </div>
+            <div class="tags-cluster">
+              <span class="tag-item">Molecular Docking</span>
+              <span class="tag-item">AutoDock Vina</span>
+              <span class="tag-item">PyMOL</span>
+              <span class="tag-item">BLAST</span>
+              <span class="tag-item">ClustalW</span>
+              <span class="tag-item">Cytoscape</span>
+              <span class="tag-item">Biological Network Analysis</span>
+              <span class="tag-item">Genomics</span>
+              <span class="tag-item">Drug Discovery</span>
+              <span class="tag-item">Protein Modeling</span>
+            </div>
+          </div>
+
+          <!-- Col 2 -->
+          <div class="skill-col">
+            <div class="skill-col-header">
+              <span class="skill-cat-num">02.2 &middot; Algorithms &amp; Models</span>
+              <h3 class="skill-col-title">Machine Learning &amp; Code</h3>
+            </div>
+            <div class="tags-cluster">
+              <span class="tag-item">Python</span>
+              <span class="tag-item">R Programming</span>
+              <span class="tag-item">Machine Learning</span>
+              <span class="tag-item">TinyML</span>
+              <span class="tag-item">TensorFlow</span>
+              <span class="tag-item">Pandas</span>
+              <span class="tag-item">NumPy</span>
+              <span class="tag-item">Statistical Data Analysis</span>
+              <span class="tag-item">Jupyter</span>
+            </div>
+          </div>
+
+          <!-- Col 3 -->
+          <div class="skill-col">
+            <div class="skill-col-header">
+              <span class="skill-cat-num">02.3 &middot; Infrastructure &amp; BI</span>
+              <h3 class="skill-col-title">Cloud &amp; Analytics Tools</h3>
+            </div>
+            <div class="tags-cluster">
+              <span class="tag-item">Google Cloud Platform</span>
+              <span class="tag-item">BigQuery</span>
+              <span class="tag-item">Data Analytics</span>
+              <span class="tag-item">Data Visualization</span>
+              <span class="tag-item">Git &amp; GitHub</span>
+              <span class="tag-item">Power BI</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1666,6 +1910,19 @@ const dots = document.querySelectorAll('.pagination-dot');
 const counter = document.getElementById('slideCounter');
 const totalSlides = slides.length;
 let currentIndex = 0;
+
+function switchWorkTab(tabName) {
+  const tabBtns = document.querySelectorAll('.work-tab-btn');
+  const tabPanes = document.querySelectorAll('.work-tab-pane');
+  
+  tabBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
+  });
+  
+  tabPanes.forEach(pane => {
+    pane.classList.toggle('active', pane.id === 'pane-' + tabName);
+  });
+}
 
 function updateUI(index) {
   currentIndex = index;
