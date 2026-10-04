@@ -786,16 +786,28 @@ a {
 }
 
 .projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1.8rem;
   margin-bottom: 2.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+  padding-right: 0.5rem;
+  scroll-snap-type: x mandatory;
 }
 
-@media (max-width: 768px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
+.projects-grid::-webkit-scrollbar {
+  height: 4px;
+}
+.projects-grid::-webkit-scrollbar-track {
+  background: var(--bg-alt);
+  border-radius: 2px;
+}
+.projects-grid::-webkit-scrollbar-thumb {
+  background: var(--accent-warm);
+  border-radius: 2px;
 }
 
 .project-card {
@@ -808,6 +820,9 @@ a {
   justify-content: space-between;
   transition: var(--transition);
   position: relative;
+  flex: 0 0 360px;
+  min-width: 360px;
+  scroll-snap-align: start;
 }
 
 .project-card:hover {
@@ -883,14 +898,29 @@ a {
 }
 
 .ptech-tag {
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  padding: 0.3rem 0.75rem;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  color: var(--text-main);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  padding: 0.28rem 0.65rem;
+  background: #181818;
+  border: none;
+  border-radius: 3px;
+  color: #E8E8E2;
   font-weight: 500;
+  font-family: 'Courier New', Courier, monospace;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: background 0.2s ease;
+}
+
+.ptech-tag::before {
+  content: '#';
+  color: #719F91;
+  font-weight: 700;
+}
+
+.ptech-tag:hover {
+  background: #2a2a2a;
 }
 
 /* ── SLIDE 2: WORK HIGHLIGHTS ── */
@@ -1381,6 +1411,118 @@ a {
     display: block;
   }
 }
+
+/* ── SLIDE ENTRANCE ANIMATIONS ── */
+.slide-panel {
+  --anim-dur: 0.65s;
+  --anim-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Elements to animate inside slides */
+.slide-header,
+.hero-text,
+.about-grid,
+.about-leadership-sub,
+.projects-grid,
+.work-tabs-nav,
+.skills-grid,
+.github-banner,
+.certs-grid,
+.awards-grid,
+.contact-container {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--anim-dur) var(--anim-ease),
+              transform var(--anim-dur) var(--anim-ease);
+}
+
+/* When slide is active/visible, animate elements in */
+.slide-panel.slide-visible .slide-header,
+.slide-panel.slide-visible .hero-text,
+.slide-panel.slide-visible .about-grid,
+.slide-panel.slide-visible .about-leadership-sub,
+.slide-panel.slide-visible .projects-grid,
+.slide-panel.slide-visible .work-tabs-nav,
+.slide-panel.slide-visible .skills-grid,
+.slide-panel.slide-visible .github-banner,
+.slide-panel.slide-visible .certs-grid,
+.slide-panel.slide-visible .awards-grid,
+.slide-panel.slide-visible .contact-container {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays */
+.slide-panel.slide-visible .slide-header { transition-delay: 0.05s; }
+.slide-panel.slide-visible .hero-text    { transition-delay: 0.12s; }
+.slide-panel.slide-visible .about-grid   { transition-delay: 0.12s; }
+.slide-panel.slide-visible .work-tabs-nav { transition-delay: 0.10s; }
+.slide-panel.slide-visible .projects-grid { transition-delay: 0.22s; }
+.slide-panel.slide-visible .about-leadership-sub { transition-delay: 0.28s; }
+.slide-panel.slide-visible .skills-grid  { transition-delay: 0.22s; }
+.slide-panel.slide-visible .github-banner { transition-delay: 0.38s; }
+.slide-panel.slide-visible .certs-grid   { transition-delay: 0.18s; }
+.slide-panel.slide-visible .awards-grid  { transition-delay: 0.18s; }
+.slide-panel.slide-visible .contact-container { transition-delay: 0.10s; }
+
+/* Profile photo entrance */
+.hero-photo-wrap {
+  opacity: 0;
+  transform: scale(0.96) translateX(16px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1) 0.06s,
+              transform 0.7s cubic-bezier(0.16,1,0.3,1) 0.06s;
+}
+
+.slide-panel.slide-visible .hero-photo-wrap {
+  opacity: 1;
+  transform: scale(1) translateX(0);
+}
+
+/* Card stagger within grids */
+.slide-panel.slide-visible .cert-card,
+.slide-panel.slide-visible .award-item {
+  animation: cardFadeUp 0.55s var(--anim-ease) both;
+}
+
+.slide-panel.slide-visible .cert-card:nth-child(1) { animation-delay: 0.22s; }
+.slide-panel.slide-visible .cert-card:nth-child(2) { animation-delay: 0.30s; }
+.slide-panel.slide-visible .cert-card:nth-child(3) { animation-delay: 0.38s; }
+.slide-panel.slide-visible .cert-card:nth-child(4) { animation-delay: 0.46s; }
+.slide-panel.slide-visible .cert-card:nth-child(5) { animation-delay: 0.54s; }
+
+.slide-panel.slide-visible .award-item:nth-child(1) { animation-delay: 0.22s; }
+.slide-panel.slide-visible .award-item:nth-child(2) { animation-delay: 0.34s; }
+.slide-panel.slide-visible .award-item:nth-child(3) { animation-delay: 0.46s; }
+
+.slide-panel.slide-visible .project-card:nth-child(1) { animation: cardFadeUp 0.55s var(--anim-ease) 0.26s both; }
+.slide-panel.slide-visible .project-card:nth-child(2) { animation: cardFadeUp 0.55s var(--anim-ease) 0.36s both; }
+.slide-panel.slide-visible .project-card:nth-child(3) { animation: cardFadeUp 0.55s var(--anim-ease) 0.46s both; }
+
+@keyframes cardFadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Reset animation when slide goes out of view */
+.slide-panel:not(.slide-visible) .cert-card,
+.slide-panel:not(.slide-visible) .award-item,
+.slide-panel:not(.slide-visible) .project-card {
+  animation: none;
+  opacity: 0;
+}
+
+/* Lead cards stagger */
+.slide-panel.slide-visible .lead-card {
+  animation: cardFadeUp 0.55s var(--anim-ease) both;
+}
+.slide-panel.slide-visible .lead-card:nth-child(1) { animation-delay: 0.34s; }
+.slide-panel.slide-visible .lead-card:nth-child(2) { animation-delay: 0.46s; }
+
+.slide-panel:not(.slide-visible) .lead-card {
+  animation: none;
+  opacity: 0;
+}
+
 </style>
 </head>
 <body>
@@ -1995,6 +2137,22 @@ window.addEventListener('keydown', (e) => {
 
 // Initialize first slide state
 updateUI(0);
+
+// ── INTERSECTION OBSERVER FOR ENTRANCE ANIMATIONS ──
+const slideObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+      entry.target.classList.add('slide-visible');
+    } else {
+      entry.target.classList.remove('slide-visible');
+    }
+  });
+}, {
+  root: slider,
+  threshold: 0.5
+});
+
+slides.forEach(slide => slideObserver.observe(slide));
 </script>
 </body>
 </html>
