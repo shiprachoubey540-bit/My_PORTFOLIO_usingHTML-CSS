@@ -787,27 +787,9 @@ a {
 
 .projects-grid {
   display: flex;
-  flex-direction: row;
-  gap: 1.8rem;
+  flex-direction: column;
+  gap: 1.6rem;
   margin-bottom: 2.5rem;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 1rem;
-  padding-right: 0.5rem;
-  scroll-snap-type: x mandatory;
-}
-
-.projects-grid::-webkit-scrollbar {
-  height: 4px;
-}
-.projects-grid::-webkit-scrollbar-track {
-  background: var(--bg-alt);
-  border-radius: 2px;
-}
-.projects-grid::-webkit-scrollbar-thumb {
-  background: var(--accent-warm);
-  border-radius: 2px;
 }
 
 .project-card {
@@ -820,9 +802,7 @@ a {
   justify-content: space-between;
   transition: var(--transition);
   position: relative;
-  flex: 0 0 360px;
-  min-width: 360px;
-  scroll-snap-align: start;
+  width: 100%;
 }
 
 .project-card:hover {
