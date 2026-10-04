@@ -27,20 +27,18 @@
   --serif: 'Cormorant Garamond', Georgia, serif;
   --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  --max-w: 1240px;
+  --nav-height: 80px;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: var(--sans);
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   background-color: var(--bg);
   color: var(--text-main);
+  font-family: var(--sans);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 ::selection {
@@ -48,83 +46,47 @@ body {
   color: #FAFAF8;
 }
 
-/* ── LAYOUT & UTILITIES ── */
-.container {
-  max-width: var(--max-w);
-  margin: 0 auto;
-  padding: 0 2.5rem;
-}
-
-@media (max-width: 768px) {
-  .container {
-    padding: 0 1.5rem;
-  }
-}
-
 a {
   color: inherit;
   text-decoration: none;
 }
 
-.section-padding {
-  padding: 7.5rem 0;
+/* Custom scrollbars inside slides */
+.slide-content::-webkit-scrollbar {
+  width: 6px;
+}
+.slide-content::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+.slide-content::-webkit-scrollbar-thumb {
+  background: rgba(24, 24, 24, 0.15);
+  border-radius: 3px;
+}
+.slide-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(24, 24, 24, 0.3);
 }
 
-@media (max-width: 768px) {
-  .section-padding {
-    padding: 5rem 0;
-  }
-}
-
-.sec-header {
-  margin-bottom: 4rem;
-  position: relative;
-}
-
-.sec-num {
-  font-family: var(--sans);
-  font-size: 0.75rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--accent-warm);
-  font-weight: 600;
-  display: block;
-  margin-bottom: 0.75rem;
-}
-
-.sec-title {
-  font-family: var(--serif);
-  font-size: clamp(2.4rem, 4vw, 3.5rem);
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
-  color: var(--text-main);
-}
-
-.sec-subtitle {
-  font-size: 1rem;
-  color: var(--text-muted);
-  max-width: 580px;
-  margin-top: 0.8rem;
-  font-weight: 300;
-}
-
-/* ── NAVBAR (ARNOLD STYLE) ── */
+/* ── FIXED TOP NAVBAR (ARNOLD STYLE) ── */
 .site-nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  height: var(--nav-height);
   z-index: 1000;
-  background: rgba(250, 250, 248, 0.85);
+  background: rgba(250, 250, 248, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
-  transition: var(--transition);
+  display: flex;
+  align-items: center;
 }
 
-.nav-inner {
-  height: 84px;
+.nav-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -132,12 +94,13 @@ a {
 
 .nav-brand {
   font-family: var(--serif);
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-main);
-  transition: var(--transition);
+  cursor: pointer;
+  transition: opacity 0.25s ease;
 }
 
 .nav-brand:hover {
@@ -147,46 +110,52 @@ a {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 2.5rem;
+  gap: 2.2rem;
   list-style: none;
 }
 
-.nav-links a {
-  font-size: 0.78rem;
+.nav-item {
+  font-size: 0.76rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--text-muted);
   font-weight: 500;
   position: relative;
+  padding: 0.4rem 0;
+  cursor: pointer;
   transition: color 0.25s ease;
-  padding: 0.25rem 0;
+  background: none;
+  border: none;
+  font-family: inherit;
 }
 
-.nav-links a::after {
+.nav-item::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   width: 0;
-  height: 1px;
+  height: 1.5px;
   background: var(--text-main);
-  transition: width 0.3s ease;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.nav-links a:hover {
+.nav-item:hover,
+.nav-item.active {
   color: var(--text-main);
 }
 
-.nav-links a:hover::after {
+.nav-item.active::after,
+.nav-item:hover::after {
   width: 100%;
 }
 
 .nav-resume-btn {
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   font-weight: 500;
-  padding: 0.6rem 1.4rem;
+  padding: 0.55rem 1.3rem;
   border: 1px solid var(--text-main);
   border-radius: 2px;
   transition: var(--transition);
@@ -198,7 +167,7 @@ a {
   color: #FFFFFF;
 }
 
-.mobile-toggle {
+.mobile-menu-toggle {
   display: none;
   background: none;
   border: none;
@@ -206,37 +175,92 @@ a {
   padding: 0.5rem;
 }
 
-.mobile-toggle span {
+.mobile-menu-toggle span {
   display: block;
-  width: 24px;
+  width: 22px;
   height: 1.5px;
   background: var(--text-main);
   margin: 5px 0;
   transition: var(--transition);
 }
 
-@media (max-width: 992px) {
-  .nav-links {
-    display: none;
-  }
-  .mobile-toggle {
-    display: block;
-  }
-}
-
-/* ── HERO SECTION (ARNOLD ARCHITECTURAL AESTHETIC) ── */
-.hero {
-  min-height: 100vh;
-  padding-top: 84px;
+/* ── HORIZONTAL SLIDER VIEWPORT ── */
+.horizontal-slider {
   display: flex;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  background: #FAFAF8;
+  flex-direction: row;
+  width: 100vw;
+  height: calc(100vh - var(--nav-height));
+  margin-top: var(--nav-height);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Smooth Architectural Wave Backdrop */
-.hero-stage {
+/* Individual Slide Panel */
+.slide-panel {
+  flex: 0 0 100vw;
+  width: 100vw;
+  height: calc(100vh - var(--nav-height));
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.slide-content {
+  max-width: 1300px;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 4.5rem 2.5rem 6.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .slide-content {
+    padding: 2.5rem 1.5rem 5.5rem;
+    justify-content: flex-start;
+  }
+}
+
+/* Editorial Section Header */
+.slide-header {
+  margin-bottom: 3.2rem;
+}
+
+.slide-num {
+  font-size: 0.74rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.slide-title {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 4.2vw, 3.8rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--text-main);
+}
+
+.slide-subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin-top: 0.65rem;
+  font-weight: 300;
+}
+
+/* ── SLIDE 0: HERO (ARNOLD AESTHETIC) ── */
+.hero-stage-bg {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -246,11 +270,11 @@ a {
 
 .hero-curve-1 {
   position: absolute;
-  top: -10%;
-  right: -5%;
-  width: 75vw;
-  height: 110vh;
-  background: radial-gradient(ellipse at center, rgba(235, 232, 224, 0.8) 0%, rgba(245, 243, 237, 0.4) 50%, transparent 75%);
+  top: -15%;
+  right: -8%;
+  width: 70vw;
+  height: 105vh;
+  background: radial-gradient(ellipse at center, rgba(235, 232, 224, 0.85) 0%, rgba(245, 243, 237, 0.4) 50%, transparent 75%);
   border-radius: 50%;
   transform: rotate(-15deg);
 }
@@ -258,10 +282,10 @@ a {
 .hero-curve-2 {
   position: absolute;
   bottom: -20%;
-  left: 20%;
-  width: 60vw;
-  height: 80vh;
-  background: radial-gradient(ellipse at center, rgba(228, 223, 212, 0.45) 0%, rgba(250, 250, 248, 0) 70%);
+  left: 15%;
+  width: 55vw;
+  height: 75vh;
+  background: radial-gradient(ellipse at center, rgba(228, 223, 212, 0.5) 0%, rgba(250, 250, 248, 0) 70%);
   border-radius: 50%;
 }
 
@@ -273,13 +297,12 @@ a {
   position: relative;
   z-index: 2;
   width: 100%;
-  padding: 4rem 0 5rem;
 }
 
 @media (max-width: 992px) {
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2.5rem;
     text-align: center;
   }
 }
@@ -287,7 +310,7 @@ a {
 .hero-content {
   display: flex;
   flex-direction: column;
-  gap: 1.8rem;
+  gap: 1.6rem;
 }
 
 .hero-eyebrow {
@@ -330,7 +353,7 @@ a {
   line-height: 0.95;
   text-transform: uppercase;
   color: var(--text-main);
-  margin-left: -0.05em;
+  margin-left: -0.04em;
 }
 
 .hero-subtitle {
@@ -344,13 +367,12 @@ a {
 }
 
 .hero-quote {
-  font-size: 0.98rem;
+  font-size: 0.96rem;
   color: var(--text-muted);
-  line-height: 1.8;
+  line-height: 1.75;
   max-width: 520px;
-  padding-left: 1.4rem;
+  padding-left: 1.3rem;
   border-left: 1.5px solid var(--border-strong);
-  font-style: normal;
   font-weight: 300;
 }
 
@@ -364,8 +386,8 @@ a {
 .hero-actions {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  margin-top: 0.8rem;
+  gap: 1.2rem;
+  margin-top: 0.5rem;
 }
 
 @media (max-width: 992px) {
@@ -378,15 +400,16 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.9rem 2.2rem;
+  padding: 0.85rem 2rem;
   background: var(--text-main);
   color: #FFFFFF;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   font-weight: 500;
   border: 1px solid var(--text-main);
   border-radius: 2px;
+  cursor: pointer;
   transition: var(--transition);
 }
 
@@ -399,15 +422,16 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.9rem 2.2rem;
+  padding: 0.85rem 2rem;
   background: transparent;
   color: var(--text-main);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   font-weight: 500;
   border: 1px solid var(--border-strong);
   border-radius: 2px;
+  cursor: pointer;
   transition: var(--transition);
 }
 
@@ -419,8 +443,8 @@ a {
 .hero-socials {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  margin-top: 0.5rem;
+  gap: 1.15rem;
+  margin-top: 0.4rem;
 }
 
 @media (max-width: 992px) {
@@ -430,7 +454,7 @@ a {
 }
 
 .hero-socials a {
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--text-light);
@@ -447,7 +471,7 @@ a {
   font-size: 0.75rem;
 }
 
-/* Hero Portrait Image (Architectural Frame) */
+/* Portrait Visual Frame */
 .hero-visual {
   position: relative;
   display: flex;
@@ -457,12 +481,12 @@ a {
 .portrait-frame {
   position: relative;
   width: 100%;
-  max-width: 380px;
+  max-width: 360px;
   aspect-ratio: 3 / 4;
   background: #EAE6DE;
   border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(24, 24, 24, 0.06);
 }
 
@@ -476,7 +500,7 @@ a {
 }
 
 .portrait-frame:hover img {
-  transform: scale(1.025);
+  transform: scale(1.03);
 }
 
 .portrait-caption {
@@ -484,50 +508,50 @@ a {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 1.5rem;
-  background: linear-gradient(to top, rgba(18, 18, 18, 0.7) 0%, transparent 100%);
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(to top, rgba(18, 18, 18, 0.75) 0%, transparent 100%);
   color: #FFFFFF;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   font-weight: 500;
 }
 
-/* ── ABOUT SECTION ── */
-.about-section {
-  background: #FFFFFF;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+/* ── SLIDE 1: ABOUT & LEADERSHIP (COMBINED) ── */
+.about-unified-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
 }
 
-.about-grid {
+.about-top-grid {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 5rem;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 3.5rem;
   align-items: start;
 }
 
 @media (max-width: 992px) {
-  .about-grid {
+  .about-top-grid {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2rem;
   }
 }
 
 .about-narrative h3 {
   font-family: var(--serif);
-  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  font-size: clamp(1.85rem, 2.8vw, 2.4rem);
   font-weight: 400;
   line-height: 1.25;
-  margin-bottom: 1.8rem;
+  margin-bottom: 1.4rem;
   color: var(--text-main);
 }
 
 .about-narrative p {
   color: var(--text-muted);
-  font-size: 1.02rem;
-  line-height: 1.85;
-  margin-bottom: 1.4rem;
+  font-size: 0.98rem;
+  line-height: 1.8;
+  margin-bottom: 1.1rem;
   font-weight: 300;
 }
 
@@ -536,31 +560,37 @@ a {
   font-weight: 500;
 }
 
-.about-facts {
+.about-facts-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 576px) {
+  .about-facts-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .fact-item {
-  padding: 1.8rem 2rem;
-  background: var(--bg);
+  padding: 1.4rem 1.6rem;
+  background: #FFFFFF;
   border: 1px solid var(--border);
   border-radius: 2px;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.3rem;
   transition: var(--transition);
 }
 
 .fact-item:hover {
   border-color: var(--border-strong);
-  background: #FAF8F5;
   transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.03);
 }
 
 .fact-label {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent-warm);
@@ -569,16 +599,137 @@ a {
 
 .fact-val {
   font-family: var(--serif);
-  font-size: 1.35rem;
+  font-size: 1.22rem;
   font-weight: 500;
   color: var(--text-main);
 }
 
-/* ── SKILLS & EXPERTISE ── */
+/* Leadership Subsection inside About */
+.about-leadership-sub {
+  border-top: 1px solid var(--border);
+  padding-top: 3rem;
+}
+
+.sub-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.sub-title {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+  font-weight: 400;
+  color: var(--text-main);
+  margin-bottom: 1.8rem;
+}
+
+.lead-cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 992px) {
+  .lead-cards-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lead-card {
+  padding: 2.2rem 2.4rem;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+}
+
+.lead-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.04);
+  transform: translateY(-3px);
+}
+
+.lead-card-top {
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+  margin-bottom: 1.3rem;
+  padding-bottom: 1.3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.lead-logo-wrap {
+  width: 62px;
+  height: 62px;
+  background: #FAFAF8;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  flex-shrink: 0;
+}
+
+.lead-logo-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.lead-title-group h4 {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--text-main);
+  line-height: 1.25;
+}
+
+.lead-org {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+.lead-tasks-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.lead-tasks-list li {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  position: relative;
+  padding-left: 1.3rem;
+  font-weight: 300;
+}
+
+.lead-tasks-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--accent-warm);
+  font-weight: 400;
+}
+
+/* ── SLIDE 2: SKILLS & EXPERTISE ── */
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: 1.8rem;
 }
 
 @media (max-width: 992px) {
@@ -589,39 +740,38 @@ a {
 
 .skill-col {
   background: #FFFFFF;
-  padding: 2.5rem 2rem;
+  padding: 2.2rem 1.8rem;
   border: 1px solid var(--border);
   border-radius: 2px;
   display: flex;
   flex-direction: column;
   transition: var(--transition);
-  position: relative;
 }
 
 .skill-col:hover {
   border-color: var(--border-strong);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.04);
-  transform: translateY(-4px);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.04);
+  transform: translateY(-3px);
 }
 
 .skill-col-header {
-  margin-bottom: 1.75rem;
-  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.1rem;
   border-bottom: 1px solid var(--border);
 }
 
 .skill-cat-num {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   letter-spacing: 0.2em;
   color: var(--accent-warm);
   font-weight: 600;
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.35rem;
 }
 
 .skill-col-title {
   font-family: var(--serif);
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 500;
   color: var(--text-main);
 }
@@ -629,13 +779,13 @@ a {
 .tags-cluster {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.55rem;
+  gap: 0.5rem;
 }
 
 .tag-item {
-  font-size: 0.8rem;
-  letter-spacing: 0.04em;
-  padding: 0.4rem 0.9rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  padding: 0.35rem 0.8rem;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 2px;
@@ -649,149 +799,44 @@ a {
   border-color: var(--text-main);
 }
 
-/* GitHub Project Callout */
 .github-banner {
-  margin-top: 3rem;
-  padding: 2.2rem 2.8rem;
+  margin-top: 2.5rem;
+  padding: 2rem 2.4rem;
   background: #FFFFFF;
   border: 1px solid var(--border);
   border-left: 3px solid var(--accent-warm);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
   transition: var(--transition);
 }
 
 .github-banner:hover {
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
   border-color: var(--border-strong);
 }
 
 .gh-banner-content h4 {
   font-family: var(--serif);
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   font-weight: 500;
   color: var(--text-main);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
 }
 
 .gh-banner-content p {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text-muted);
   font-weight: 300;
 }
 
-/* ── LEADERSHIP & ROLES ── */
-.leadership-section {
-  background: #FFFFFF;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.lead-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2.5rem;
-}
-
-@media (max-width: 992px) {
-  .lead-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.lead-card {
-  padding: 2.8rem;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  display: flex;
-  flex-direction: column;
-  transition: var(--transition);
-}
-
-.lead-card:hover {
-  border-color: var(--border-strong);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.04);
-  transform: translateY(-3px);
-}
-
-.lead-card-top {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.lead-logo-wrap {
-  width: 68px;
-  height: 68px;
-  background: #FFFFFF;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  flex-shrink: 0;
-}
-
-.lead-logo-wrap img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.lead-title-group h3 {
-  font-family: var(--serif);
-  font-size: 1.45rem;
-  font-weight: 500;
-  color: var(--text-main);
-  line-height: 1.25;
-}
-
-.lead-org {
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent-warm);
-  font-weight: 600;
-  margin-top: 0.3rem;
-}
-
-.lead-tasks-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-
-.lead-tasks-list li {
-  font-size: 0.92rem;
-  color: var(--text-muted);
-  line-height: 1.6;
-  position: relative;
-  padding-left: 1.4rem;
-  font-weight: 300;
-}
-
-.lead-tasks-list li::before {
-  content: '—';
-  position: absolute;
-  left: 0;
-  color: var(--accent-warm);
-  font-weight: 400;
-}
-
-/* ── CERTIFICATIONS (EDITORIAL GALLERY) ── */
+/* ── SLIDE 3: CERTIFICATIONS ── */
 .certs-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.6rem;
 }
 
 .cert-card {
@@ -806,19 +851,18 @@ a {
 
 .cert-card:hover {
   border-color: var(--border-strong);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.06);
-  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.05);
+  transform: translateY(-4px);
 }
 
 .cert-media {
-  height: 200px;
+  height: 175px;
   background: #F4F2EC;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 1.4rem;
   overflow: hidden;
-  position: relative;
   border-bottom: 1px solid var(--border);
 }
 
@@ -842,7 +886,7 @@ a {
 }
 
 .cert-info {
-  padding: 1.8rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -850,50 +894,44 @@ a {
 }
 
 .cert-issuer {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--accent-warm);
   font-weight: 600;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.35rem;
 }
 
 .cert-name {
   font-family: var(--serif);
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.3;
   color: var(--text-main);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .cert-link {
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-weight: 600;
   color: var(--text-main);
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   transition: gap 0.25s ease;
 }
 
 .cert-link:hover {
-  gap: 0.8rem;
+  gap: 0.75rem;
 }
 
-/* ── AWARDS & ACHIEVEMENTS ── */
-.awards-section {
-  background: #FFFFFF;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
+/* ── SLIDE 4: AWARDS ── */
 .awards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: 1.8rem;
 }
 
 @media (max-width: 992px) {
@@ -903,7 +941,7 @@ a {
 }
 
 .award-item {
-  background: var(--bg);
+  background: #FFFFFF;
   border: 1px solid var(--border);
   border-radius: 2px;
   overflow: hidden;
@@ -912,12 +950,12 @@ a {
 
 .award-item:hover {
   border-color: var(--border-strong);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.05);
   transform: translateY(-4px);
 }
 
 .award-image-wrap {
-  height: 250px;
+  height: 220px;
   overflow: hidden;
   position: relative;
   background: #EAE6DE;
@@ -935,78 +973,74 @@ a {
 }
 
 .award-details {
-  padding: 1.8rem;
+  padding: 1.6rem;
 }
 
 .award-tag {
   display: inline-block;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--accent-warm);
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.45rem;
 }
 
 .award-item-title {
   font-family: var(--serif);
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 500;
   color: var(--text-main);
   line-height: 1.3;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.45rem;
 }
 
 .award-desc {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text-muted);
   line-height: 1.6;
   font-weight: 300;
 }
 
-/* ── CONTACT & FOOTER ── */
-.contact-section {
-  padding: 8rem 0 6rem;
-  text-align: center;
-}
-
-.contact-box {
-  max-width: 720px;
+/* ── SLIDE 5: CONTACT ── */
+.contact-container {
+  max-width: 760px;
   margin: 0 auto;
+  text-align: center;
 }
 
 .contact-lead {
   font-family: var(--serif);
-  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
   font-weight: 400;
   line-height: 1.15;
   color: var(--text-main);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.3rem;
 }
 
 .contact-text {
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   color: var(--text-muted);
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.2rem;
   font-weight: 300;
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 .email-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
-  padding: 1.1rem 2.8rem;
+  gap: 0.75rem;
+  padding: 1rem 2.6rem;
   background: var(--text-main);
   color: #FFFFFF;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-weight: 500;
   border-radius: 2px;
   border: 1px solid var(--text-main);
   transition: var(--transition);
-  margin-bottom: 3.5rem;
+  margin-bottom: 3.2rem;
 }
 
 .email-button:hover {
@@ -1018,14 +1052,14 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 1.8rem;
   flex-wrap: wrap;
-  padding-bottom: 4rem;
+  padding-bottom: 3rem;
   border-bottom: 1px solid var(--border);
 }
 
 .contact-links-row a {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -1038,11 +1072,11 @@ a {
 }
 
 .site-footer {
-  padding-top: 3rem;
+  padding-top: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   letter-spacing: 0.1em;
   color: var(--text-light);
   flex-wrap: wrap;
@@ -1055,437 +1089,641 @@ a {
     text-align: center;
   }
 }
+
+/* ── FLOATING SLIDER NAVIGATION CONTROLS ── */
+.slider-arrow-btn {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 900;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-strong);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  transition: var(--transition);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.slider-arrow-btn:hover {
+  background: var(--text-main);
+  color: #FFFFFF;
+  border-color: var(--text-main);
+  transform: translateY(-50%) scale(1.06);
+}
+
+.slider-arrow-btn.prev-btn {
+  left: 1.8rem;
+}
+
+.slider-arrow-btn.next-btn {
+  right: 1.8rem;
+}
+
+@media (max-width: 768px) {
+  .slider-arrow-btn {
+    display: none;
+  }
+}
+
+/* Bottom Pagination & Progress Indicator */
+.slider-pagination {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: rgba(255, 255, 255, 0.88);
+  padding: 0.55rem 1.4rem;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.pagination-counter {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+  color: var(--accent-warm);
+}
+
+.pagination-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.pagination-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(24, 24, 24, 0.2);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
+  padding: 0;
+}
+
+.pagination-dot.active {
+  background: var(--text-main);
+  width: 20px;
+  border-radius: 10px;
+}
+
+/* Mobile Drawer Overlay */
+@media (max-width: 992px) {
+  .nav-links {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    background: #FAFAF8;
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    padding: 2rem 2.5rem;
+    gap: 1.5rem;
+    align-items: flex-start;
+    display: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  }
+  .nav-links.active {
+    display: flex;
+  }
+  .mobile-menu-toggle {
+    display: block;
+  }
+}
 </style>
 </head>
 <body>
 
-<!-- NAVBAR (ARNOLD STYLE) -->
+<!-- FIXED TOP NAVBAR -->
 <header class="site-nav">
-  <div class="container">
-    <div class="nav-inner">
-      <a href="#hero" class="nav-brand">Shipra</a>
-      
+  <div class="nav-container">
+    <div class="nav-brand" onclick="goToSlide(0)">Shipra</div>
+
+    <nav>
       <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#leadership">Leadership</a></li>
-        <li><a href="#certificates">Certificates</a></li>
-        <li><a href="#awards">Awards</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><button class="nav-item active" onclick="goToSlide(0)">Home</button></li>
+        <li><button class="nav-item" onclick="goToSlide(1)">About</button></li>
+        <li><button class="nav-item" onclick="goToSlide(2)">Skills</button></li>
+        <li><button class="nav-item" onclick="goToSlide(3)">Certificates</button></li>
+        <li><button class="nav-item" onclick="goToSlide(4)">Awards</button></li>
+        <li><button class="nav-item" onclick="goToSlide(5)">Contact</button></li>
         <li><a href="Shipra_BIOinfResume_ATS.pdf" target="_blank" class="nav-resume-btn">Resume</a></li>
       </ul>
+    </nav>
 
-      <button class="mobile-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav-links').classList.toggle('active')">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
+    <button class="mobile-menu-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav-links').classList.toggle('active')">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </header>
 
-<!-- HERO SECTION (ARNOLD ARCHITECTURAL AESTHETIC) -->
-<section id="hero" class="hero">
-  <div class="hero-stage">
-    <div class="hero-curve-1"></div>
-    <div class="hero-curve-2"></div>
-  </div>
+<!-- HORIZONTAL SLIDER VIEWPORT (SIDE-BY-SIDE SLIDES) -->
+<main class="horizontal-slider" id="mainSlider">
 
-  <div class="container">
-    <div class="hero-grid">
-      <div class="hero-content">
-        <div class="hero-eyebrow">Portfolio &amp; Research Dossier</div>
-        <h1 class="hero-title">Shipra</h1>
-        <p class="hero-subtitle">Bioinformatics Researcher &amp; Data Scientist</p>
-        
-        <p class="hero-quote">
-          &ldquo;Curious enough to keep learning. Brave enough to try. Ambitious enough to dream big.&rdquo;
-        </p>
+  <!-- SLIDE 0: HERO (HOME) -->
+  <section class="slide-panel" id="slide-hero">
+    <div class="hero-stage-bg">
+      <div class="hero-curve-1"></div>
+      <div class="hero-curve-2"></div>
+    </div>
 
-        <div class="hero-actions">
-          <a href="#contact" class="btn-solid">Get in Touch &rarr;</a>
-          <a href="Shipra_BIOinfResume_ATS.pdf" target="_blank" class="btn-outline">Download CV</a>
+    <div class="slide-content">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-eyebrow">Portfolio &amp; Research Dossier</div>
+          <h1 class="hero-title">Shipra</h1>
+          <p class="hero-subtitle">Bioinformatics Researcher &amp; Data Scientist</p>
+
+          <p class="hero-quote">
+            &ldquo;Curious enough to keep learning. Brave enough to try. Ambitious enough to dream big.&rdquo;
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn-solid" onclick="goToSlide(1)">Explore Profile &rarr;</button>
+            <a href="Shipra_BIOinfResume_ATS.pdf" target="_blank" class="btn-outline">Download CV</a>
+          </div>
+
+          <div class="hero-socials">
+            <a href="https://www.linkedin.com/in/shipra-choubey-87aa95207/" target="_blank" rel="noopener">LinkedIn</a>
+            <span>/</span>
+            <a href="https://github.com/shiprachoubey540-bit" target="_blank" rel="noopener">GitHub</a>
+            <span>/</span>
+            <a href="https://www.credly.com/users/shipra.45429c41/badges/credly" target="_blank" rel="noopener">Credly</a>
+            <span>/</span>
+            <a href="mailto:shiprachoubey540@gmail.com">Email</a>
+          </div>
         </div>
 
-        <div class="hero-socials">
+        <div class="hero-visual">
+          <div class="portrait-frame">
+            <img src="profile_new.jpg" alt="Shipra" loading="eager">
+            <div class="portrait-caption">Digital University Kerala &middot; M.Sc.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 1: ABOUT & LEADERSHIP (COMBINED) -->
+  <section class="slide-panel" id="slide-about">
+    <div class="slide-content">
+      <div class="slide-header">
+        <span class="slide-num">01 / Profile &amp; Leadership</span>
+        <h2 class="slide-title">About Me</h2>
+        <p class="slide-subtitle">Academic profile, computational biology research focus, and institutional leadership roles.</p>
+      </div>
+
+      <div class="about-unified-container">
+        <!-- Part A: Narrative & Facts -->
+        <div class="about-top-grid">
+          <div class="about-narrative">
+            <h3>Bridging Biological Systems with Data Intelligence</h3>
+            <p>
+              I am <strong>Shipra</strong>, an M.Sc. student at <strong>Digital University Kerala</strong> working at the dynamic intersection of computational biology, data science, and applied machine learning.
+            </p>
+            <p>
+              My primary aspiration is to advance as a <strong>Bioinformatics Researcher</strong> &mdash; investigating molecular docking, genomic architectures, biological network structures, and TinyML algorithms. In parallel, I am actively open to <strong>Data Scientist</strong> roles where advanced analytical thinking, predictive modeling, and scalable workflows turn complex datasets into clear, actionable outcomes.
+            </p>
+            <p>
+              Whether analyzing structural binding affinities or designing end-to-end data pipelines, I bring disciplined curiosity, rigorous methodologies, and an ambitious commitment to scientific impact.
+            </p>
+          </div>
+
+          <div class="about-facts-grid">
+            <div class="fact-item">
+              <span class="fact-label">Academic Degree</span>
+              <span class="fact-val">M.Sc. Student</span>
+            </div>
+            <div class="fact-item">
+              <span class="fact-label">Institution</span>
+              <span class="fact-val">Digital University Kerala</span>
+            </div>
+            <div class="fact-item">
+              <span class="fact-label">Primary Specialization</span>
+              <span class="fact-val">Bioinformatics</span>
+            </div>
+            <div class="fact-item">
+              <span class="fact-label">Industry Applications</span>
+              <span class="fact-val">Data Science &amp; ML</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Part B: Leadership & Institutional Roles (Included in About Me) -->
+        <div class="about-leadership-sub">
+          <span class="sub-eyebrow">Institutional Leadership</span>
+          <h3 class="sub-title">Roles &amp; Positions</h3>
+
+          <div class="lead-cards-row">
+            <!-- COO Card -->
+            <div class="lead-card">
+              <div class="lead-card-top">
+                <div class="lead-logo-wrap">
+                  <img src="thingqbator_logo.png" alt="thingQbator Logo">
+                </div>
+                <div class="lead-title-group">
+                  <h4>Chief Operating Officer (COO)</h4>
+                  <div class="lead-org">ThingQbator Club &middot; Digital University Kerala</div>
+                </div>
+              </div>
+              <ul class="lead-tasks-list">
+                <li>Mentoring newcomers on ideation, project initiation, and structured innovation frameworks</li>
+                <li>Overseeing end-to-end club operations, internal execution, and cross-team coordination</li>
+                <li>Serving as strategic liaison between student members, university leadership, and industry partners</li>
+              </ul>
+            </div>
+
+            <!-- VP Communications Card -->
+            <div class="lead-card">
+              <div class="lead-card-top">
+                <div class="lead-logo-wrap">
+                  <img src="pmi_kerala_logo.jpg" alt="PMI Kerala Chapter Logo">
+                </div>
+                <div class="lead-title-group">
+                  <h4>Vice President &mdash; Communications</h4>
+                  <div class="lead-org">PMI-Kerala Students&rsquo; Club &middot; Digital University Kerala</div>
+                </div>
+              </div>
+              <ul class="lead-tasks-list">
+                <li>Leading chapter communications strategy, outreach, and editorial content across digital channels</li>
+                <li>Coordinating executive speaker sessions, knowledge symposiums, and networking initiatives</li>
+                <li>Fostering professional partnerships between student members, academic mentors, and PMI leaders</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: SKILLS & EXPERTISE -->
+  <section class="slide-panel" id="slide-skills">
+    <div class="slide-content">
+      <div class="slide-header">
+        <span class="slide-num">02 / Competencies</span>
+        <h2 class="slide-title">Skills &amp; Expertise</h2>
+        <p class="slide-subtitle">A multidisciplinary computational and analytical repertoire built for modern biological inquiry and data intelligence.</p>
+      </div>
+
+      <div class="skills-grid">
+        <!-- Col 1 -->
+        <div class="skill-col">
+          <div class="skill-col-header">
+            <span class="skill-cat-num">02.1 &middot; Computational Biology</span>
+            <h3 class="skill-col-title">Bioinformatics</h3>
+          </div>
+          <div class="tags-cluster">
+            <span class="tag-item">Molecular Docking</span>
+            <span class="tag-item">AutoDock Vina</span>
+            <span class="tag-item">PyMOL</span>
+            <span class="tag-item">BLAST</span>
+            <span class="tag-item">ClustalW</span>
+            <span class="tag-item">Cytoscape</span>
+            <span class="tag-item">Biological Network Analysis</span>
+            <span class="tag-item">Genomics</span>
+            <span class="tag-item">Drug Discovery</span>
+            <span class="tag-item">Protein Modeling</span>
+          </div>
+        </div>
+
+        <!-- Col 2 -->
+        <div class="skill-col">
+          <div class="skill-col-header">
+            <span class="skill-cat-num">02.2 &middot; Algorithms &amp; Models</span>
+            <h3 class="skill-col-title">Machine Learning &amp; Code</h3>
+          </div>
+          <div class="tags-cluster">
+            <span class="tag-item">Python</span>
+            <span class="tag-item">R Programming</span>
+            <span class="tag-item">Machine Learning</span>
+            <span class="tag-item">TinyML</span>
+            <span class="tag-item">TensorFlow</span>
+            <span class="tag-item">Pandas</span>
+            <span class="tag-item">NumPy</span>
+            <span class="tag-item">Statistical Data Analysis</span>
+            <span class="tag-item">Jupyter</span>
+          </div>
+        </div>
+
+        <!-- Col 3 -->
+        <div class="skill-col">
+          <div class="skill-col-header">
+            <span class="skill-cat-num">02.3 &middot; Infrastructure &amp; BI</span>
+            <h3 class="skill-col-title">Cloud &amp; Analytics Tools</h3>
+          </div>
+          <div class="tags-cluster">
+            <span class="tag-item">Google Cloud Platform</span>
+            <span class="tag-item">BigQuery</span>
+            <span class="tag-item">Data Analytics</span>
+            <span class="tag-item">Data Visualization</span>
+            <span class="tag-item">Git &amp; GitHub</span>
+            <span class="tag-item">Power BI</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- GitHub Callout -->
+      <div class="github-banner">
+        <div class="gh-banner-content">
+          <h4>Explore Applied Code &amp; Research Repositories</h4>
+          <p>Hands-on computational scripts, molecular models, and data science notebooks are hosted openly on GitHub.</p>
+        </div>
+        <a href="https://github.com/shiprachoubey540-bit" target="_blank" rel="noopener" class="btn-solid">
+          View GitHub Profile &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: CERTIFICATIONS -->
+  <section class="slide-panel" id="slide-certificates">
+    <div class="slide-content">
+      <div class="slide-header">
+        <span class="slide-num">03 / Credentials</span>
+        <h2 class="slide-title">Certifications &amp; Badges</h2>
+        <p class="slide-subtitle">Demonstrated proficiencies backed by industry simulations, technical certifications, and academic workshops.</p>
+      </div>
+
+      <div class="certs-grid">
+        <!-- 1. Google Cloud -->
+        <div class="cert-card">
+          <div class="cert-media">
+            <img src="google-cloud-data-analytics-certificate.png" alt="Google Cloud Data Analytics">
+          </div>
+          <div class="cert-info">
+            <div>
+              <div class="cert-issuer">Google Cloud</div>
+              <h3 class="cert-name">Google Cloud Data Analytics Certificate</h3>
+            </div>
+            <a href="google-cloud-data-analytics-certificate.png" target="_blank" class="cert-link">View Certificate &rarr;</a>
+          </div>
+        </div>
+
+        <!-- 2. Tata Data Vis -->
+        <div class="cert-card">
+          <div class="cert-media" style="background:#F6F8FD;">
+            <img src="tata_logo.png" alt="Tata Group Logo" style="max-height: 65%;">
+          </div>
+          <div class="cert-info">
+            <div>
+              <div class="cert-issuer">Tata Group &middot; Forage</div>
+              <h3 class="cert-name">Data Visualization Job Simulation</h3>
+            </div>
+            <a href="Tata_jobsimulation.pdf" target="_blank" class="cert-link">View Certificate &rarr;</a>
+          </div>
+        </div>
+
+        <!-- 3. IEEE TinyML -->
+        <div class="cert-card">
+          <div class="cert-media" style="background:#F3F6FB;">
+            <img src="ieee_logo.png" alt="IEEE Logo" style="max-height: 60%;">
+          </div>
+          <div class="cert-info">
+            <div>
+              <div class="cert-issuer">IEEE</div>
+              <h3 class="cert-name">Tiny Machine Learning (TinyML)</h3>
+            </div>
+            <a href="TinyML.pdf" target="_blank" class="cert-link">View Certificate &rarr;</a>
+          </div>
+        </div>
+
+        <!-- 4. Molecular Docking -->
+        <div class="cert-card">
+          <div class="cert-media cert-media-full">
+            <img src="molecular_docking_cert.png" alt="Molecular Docking Workshop Certificate">
+          </div>
+          <div class="cert-info">
+            <div>
+              <div class="cert-issuer">MSME &middot; Govt. of India</div>
+              <h3 class="cert-name">Workshop on Molecular Docking</h3>
+            </div>
+            <a href="molecular_docking_cert.png" target="_blank" class="cert-link">View Certificate &rarr;</a>
+          </div>
+        </div>
+
+        <!-- 5. PMI Kickoff Badge -->
+        <div class="cert-card">
+          <div class="cert-media" style="background: #E8F7FA;">
+            <img src="pmi_kickoff_badge.png" alt="PMI Kickoff Predictive Badge" style="max-height: 80%;">
+          </div>
+          <div class="cert-info">
+            <div>
+              <div class="cert-issuer">PMI &middot; Project Management Institute</div>
+              <h3 class="cert-name">PMI Kickoff &mdash; Predictive Methodologies</h3>
+            </div>
+            <a href="https://www.credly.com/users/shipra.45429c41/badges/credly" target="_blank" rel="noopener" class="cert-link">Verify on Credly &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: AWARDS & ACHIEVEMENTS -->
+  <section class="slide-panel" id="slide-awards">
+    <div class="slide-content">
+      <div class="slide-header">
+        <span class="slide-num">04 / Recognition</span>
+        <h2 class="slide-title">Awards &amp; Achievements</h2>
+        <p class="slide-subtitle">Demonstrated excellence in national innovation challenges and competitive problem-solving.</p>
+      </div>
+
+      <div class="awards-grid">
+        <!-- 1. Ideathon Certificate -->
+        <div class="award-item">
+          <div class="award-image-wrap">
+            <img src="ideathon_cert.jpeg" alt="ThingQbator Ideathon 2nd Position Certificate">
+          </div>
+          <div class="award-details">
+            <span class="award-tag">2nd Position &middot; Runner-up</span>
+            <h3 class="award-item-title">Certificate of Achievement</h3>
+            <p class="award-desc">Cisco ThingQbator Ideathon &middot; Nasscom Foundation &middot; Innovation Mela 2025 at Digital University Kerala.</p>
+          </div>
+        </div>
+
+        <!-- 2. Award Ceremony -->
+        <div class="award-item">
+          <div class="award-image-wrap">
+            <img src="award_ceremony.jpg" alt="Award Ceremony Presentation">
+          </div>
+          <div class="award-details">
+            <span class="award-tag">Honor &middot; Ceremony</span>
+            <h3 class="award-item-title">Ideathon: Idea for Impact</h3>
+            <p class="award-desc">Receiving the Runner-up recognition prize at the thingQbator Innovation Mela 2025 ceremony.</p>
+          </div>
+        </div>
+
+        <!-- 3. Award Voucher -->
+        <div class="award-item">
+          <div class="award-image-wrap">
+            <img src="award_cheque.jpg" alt="Recognition Voucher">
+          </div>
+          <div class="award-details">
+            <span class="award-tag">Prize &middot; Grant</span>
+            <h3 class="award-item-title">Recognition Voucher</h3>
+            <p class="award-desc">Awarded Amazon prize voucher in honor of distinguished prototype presentation and impact potential.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: CONTACT -->
+  <section class="slide-panel" id="slide-contact">
+    <div class="slide-content">
+      <div class="contact-container">
+        <div class="slide-header" style="text-align: center; margin-bottom: 2rem;">
+          <span class="slide-num">05 / Connect</span>
+          <h2 class="contact-lead">Let&rsquo;s Connect.</h2>
+        </div>
+
+        <p class="contact-text">
+          Whether you are interested in bioinformatics research collaborations, genomic modeling, data science opportunities, or academic inquiries, I would welcome the conversation.
+        </p>
+
+        <a href="mailto:shiprachoubey540@gmail.com" class="email-button">
+          shiprachoubey540@gmail.com &rarr;
+        </a>
+
+        <div class="contact-links-row">
           <a href="https://www.linkedin.com/in/shipra-choubey-87aa95207/" target="_blank" rel="noopener">LinkedIn</a>
-          <span>/</span>
           <a href="https://github.com/shiprachoubey540-bit" target="_blank" rel="noopener">GitHub</a>
-          <span>/</span>
           <a href="https://www.credly.com/users/shipra.45429c41/badges/credly" target="_blank" rel="noopener">Credly</a>
-          <span>/</span>
-          <a href="mailto:shiprachoubey540@gmail.com">Email</a>
+          <a href="Shipra_BIOinfResume_ATS.pdf" target="_blank">Download Resume</a>
         </div>
-      </div>
 
-      <div class="hero-visual">
-        <div class="portrait-frame">
-          <img src="profile_new.jpg" alt="Shipra" loading="eager">
-          <div class="portrait-caption">Digital University Kerala &middot; M.Sc.</div>
+        <div class="site-footer">
+          <span>Shipra &copy; 2026. All rights reserved.</span>
+          <span>Bioinformatics &middot; Data Science &middot; Computational Biology</span>
         </div>
       </div>
     </div>
+  </section>
+
+</main>
+
+<!-- FLOATING HORIZONTAL SLIDE CONTROLS -->
+<button class="slider-arrow-btn prev-btn" id="prevSlideBtn" aria-label="Previous Slide" onclick="navigateSlide(-1)">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="15 18 9 12 15 6"></polyline>
+  </svg>
+</button>
+
+<button class="slider-arrow-btn next-btn" id="nextSlideBtn" aria-label="Next Slide" onclick="navigateSlide(1)">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</button>
+
+<!-- BOTTOM PAGINATION PILL -->
+<div class="slider-pagination">
+  <span class="pagination-counter" id="slideCounter">01 / 06</span>
+  <div class="pagination-dots" id="paginationDots">
+    <button class="pagination-dot active" onclick="goToSlide(0)" aria-label="Slide 1"></button>
+    <button class="pagination-dot" onclick="goToSlide(1)" aria-label="Slide 2"></button>
+    <button class="pagination-dot" onclick="goToSlide(2)" aria-label="Slide 3"></button>
+    <button class="pagination-dot" onclick="goToSlide(3)" aria-label="Slide 4"></button>
+    <button class="pagination-dot" onclick="goToSlide(4)" aria-label="Slide 5"></button>
+    <button class="pagination-dot" onclick="goToSlide(5)" aria-label="Slide 6"></button>
   </div>
-</section>
-
-<!-- ABOUT SECTION -->
-<section id="about" class="section-padding about-section">
-  <div class="container">
-    <div class="sec-header">
-      <span class="sec-num">01 / Profile</span>
-      <h2 class="sec-title">About Me</h2>
-    </div>
-
-    <div class="about-grid">
-      <div class="about-narrative">
-        <h3>Bridging Biological Systems with Data Intelligence</h3>
-        <p>
-          I am <strong>Shipra</strong>, an M.Sc. student at <strong>Digital University Kerala</strong> working at the dynamic intersection of computational biology, data science, and applied machine learning.
-        </p>
-        <p>
-          My primary aspiration is to advance as a <strong>Bioinformatics Researcher</strong> &mdash; investigating molecular docking, genomic architectures, biological network structures, and TinyML algorithms. In parallel, I am actively open to <strong>Data Scientist</strong> roles where advanced analytical thinking, predictive modeling, and scalable workflows turn complex datasets into clear, actionable outcomes.
-        </p>
-        <p>
-          Whether analyzing structural binding affinities or designing end-to-end data pipelines, I bring disciplined curiosity, rigorous methodologies, and an ambitious commitment to scientific impact.
-        </p>
-      </div>
-
-      <div class="about-facts">
-        <div class="fact-item">
-          <span class="fact-label">Academic Degree</span>
-          <span class="fact-val">M.Sc. Student</span>
-        </div>
-        <div class="fact-item">
-          <span class="fact-label">Institution</span>
-          <span class="fact-val">Digital University Kerala</span>
-        </div>
-        <div class="fact-item">
-          <span class="fact-label">Primary Specialization</span>
-          <span class="fact-val">Bioinformatics &amp; Computational Biology</span>
-        </div>
-        <div class="fact-item">
-          <span class="fact-label">Industry Focus</span>
-          <span class="fact-val">Data Science &amp; Machine Learning</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SKILLS & EXPERTISE -->
-<section id="skills" class="section-padding">
-  <div class="container">
-    <div class="sec-header">
-      <span class="sec-num">02 / Competencies</span>
-      <h2 class="sec-title">Skills &amp; Expertise</h2>
-      <p class="sec-subtitle">A multidisciplinary computational and analytical repertoire built for modern biological inquiry and data intelligence.</p>
-    </div>
-
-    <div class="skills-grid">
-      <!-- Col 1 -->
-      <div class="skill-col">
-        <div class="skill-col-header">
-          <span class="skill-cat-num">02.1 &middot; Computational Biology</span>
-          <h3 class="skill-col-title">Bioinformatics</h3>
-        </div>
-        <div class="tags-cluster">
-          <span class="tag-item">Molecular Docking</span>
-          <span class="tag-item">AutoDock Vina</span>
-          <span class="tag-item">PyMOL</span>
-          <span class="tag-item">BLAST</span>
-          <span class="tag-item">ClustalW</span>
-          <span class="tag-item">Cytoscape</span>
-          <span class="tag-item">Biological Network Analysis</span>
-          <span class="tag-item">Genomics</span>
-          <span class="tag-item">Drug Discovery</span>
-          <span class="tag-item">Protein Modeling</span>
-        </div>
-      </div>
-
-      <!-- Col 2 -->
-      <div class="skill-col">
-        <div class="skill-col-header">
-          <span class="skill-cat-num">02.2 &middot; Algorithms &amp; Models</span>
-          <h3 class="skill-col-title">Machine Learning &amp; Code</h3>
-        </div>
-        <div class="tags-cluster">
-          <span class="tag-item">Python</span>
-          <span class="tag-item">R Programming</span>
-          <span class="tag-item">Machine Learning</span>
-          <span class="tag-item">TinyML</span>
-          <span class="tag-item">TensorFlow</span>
-          <span class="tag-item">Pandas</span>
-          <span class="tag-item">NumPy</span>
-          <span class="tag-item">Statistical Data Analysis</span>
-          <span class="tag-item">Jupyter</span>
-        </div>
-      </div>
-
-      <!-- Col 3 -->
-      <div class="skill-col">
-        <div class="skill-col-header">
-          <span class="skill-cat-num">02.3 &middot; Infrastructure &amp; BI</span>
-          <h3 class="skill-col-title">Cloud &amp; Analytics Tools</h3>
-        </div>
-        <div class="tags-cluster">
-          <span class="tag-item">Google Cloud Platform</span>
-          <span class="tag-item">BigQuery</span>
-          <span class="tag-item">Data Analytics</span>
-          <span class="tag-item">Data Visualization</span>
-          <span class="tag-item">Git &amp; GitHub</span>
-          <span class="tag-item">Power BI</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- GitHub Project Callout -->
-    <div class="github-banner">
-      <div class="gh-banner-content">
-        <h4>Explore Applied Code &amp; Research Repositories</h4>
-        <p>Hands-on computational scripts, molecular models, and data science notebooks are hosted openly on GitHub.</p>
-      </div>
-      <a href="https://github.com/shiprachoubey540-bit" target="_blank" rel="noopener" class="btn-solid">
-        View GitHub Profile &rarr;
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- LEADERSHIP & ROLES -->
-<section id="leadership" class="section-padding leadership-section">
-  <div class="container">
-    <div class="sec-header">
-      <span class="sec-num">03 / Initiative</span>
-      <h2 class="sec-title">Leadership &amp; Positions</h2>
-      <p class="sec-subtitle">Guiding operations, cultivating innovation, and leading community communications across institutional student bodies.</p>
-    </div>
-
-    <div class="lead-grid">
-      <!-- COO Card -->
-      <div class="lead-card">
-        <div class="lead-card-top">
-          <div class="lead-logo-wrap">
-            <img src="thingqbator_logo.png" alt="thingQbator Logo">
-          </div>
-          <div class="lead-title-group">
-            <h3>Chief Operating Officer (COO)</h3>
-            <div class="lead-org">ThingQbator Club &middot; Digital University Kerala</div>
-          </div>
-        </div>
-        <ul class="lead-tasks-list">
-          <li>Mentoring newcomers on ideation, project initiation, and structured innovation frameworks</li>
-          <li>Overseeing end-to-end club operations, internal execution, and cross-team coordination</li>
-          <li>Serving as strategic liaison between student members, university leadership, and industry partners</li>
-        </ul>
-      </div>
-
-      <!-- VP Communications Card -->
-      <div class="lead-card">
-        <div class="lead-card-top">
-          <div class="lead-logo-wrap">
-            <img src="pmi_kerala_logo.jpg" alt="PMI Kerala Student Chapter Logo">
-          </div>
-          <div class="lead-title-group">
-            <h3>Vice President &mdash; Communications</h3>
-            <div class="lead-org">PMI-Kerala Students&rsquo; Club &middot; Digital University Kerala</div>
-          </div>
-        </div>
-        <ul class="lead-tasks-list">
-          <li>Leading chapter communications strategy, outreach, and editorial content across digital channels</li>
-          <li>Coordinating executive speaker sessions, knowledge symposiums, and networking initiatives</li>
-          <li>Fostering professional partnerships between student members, academic mentors, and PMI leaders</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CERTIFICATES GALLERY -->
-<section id="certificates" class="section-padding">
-  <div class="container">
-    <div class="sec-header">
-      <span class="sec-num">04 / Credentials</span>
-      <h2 class="sec-title">Certifications &amp; Badges</h2>
-      <p class="sec-subtitle">Demonstrated proficiencies backed by industry simulations, technical certifications, and academic workshops.</p>
-    </div>
-
-    <div class="certs-grid">
-      <!-- 1. Google Cloud -->
-      <div class="cert-card">
-        <div class="cert-media">
-          <img src="google-cloud-data-analytics-certificate.png" alt="Google Cloud Data Analytics">
-        </div>
-        <div class="cert-info">
-          <div>
-            <div class="cert-issuer">Google Cloud</div>
-            <h3 class="cert-name">Google Cloud Data Analytics Certificate</h3>
-          </div>
-          <a href="google-cloud-data-analytics-certificate.png" target="_blank" class="cert-link">View Certificate &rarr;</a>
-        </div>
-      </div>
-
-      <!-- 2. Tata Data Vis -->
-      <div class="cert-card">
-        <div class="cert-media" style="background:#F6F8FD;">
-          <img src="tata_logo.png" alt="Tata Group Logo" style="max-height: 65%;">
-        </div>
-        <div class="cert-info">
-          <div>
-            <div class="cert-issuer">Tata Group &middot; Forage</div>
-            <h3 class="cert-name">Data Visualization Job Simulation</h3>
-          </div>
-          <a href="Tata_jobsimulation.pdf" target="_blank" class="cert-link">View Certificate &rarr;</a>
-        </div>
-      </div>
-
-      <!-- 3. IEEE TinyML -->
-      <div class="cert-card">
-        <div class="cert-media" style="background:#F3F6FB;">
-          <img src="ieee_logo.png" alt="IEEE Logo" style="max-height: 60%;">
-        </div>
-        <div class="cert-info">
-          <div>
-            <div class="cert-issuer">IEEE</div>
-            <h3 class="cert-name">Tiny Machine Learning (TinyML)</h3>
-          </div>
-          <a href="TinyML.pdf" target="_blank" class="cert-link">View Certificate &rarr;</a>
-        </div>
-      </div>
-
-      <!-- 4. Molecular Docking -->
-      <div class="cert-card">
-        <div class="cert-media cert-media-full">
-          <img src="molecular_docking_cert.png" alt="Molecular Docking Workshop Certificate">
-        </div>
-        <div class="cert-info">
-          <div>
-            <div class="cert-issuer">MSME &middot; Govt. of India</div>
-            <h3 class="cert-name">Workshop on Molecular Docking</h3>
-          </div>
-          <a href="molecular_docking_cert.png" target="_blank" class="cert-link">View Certificate &rarr;</a>
-        </div>
-      </div>
-
-      <!-- 5. PMI Kickoff Badge -->
-      <div class="cert-card">
-        <div class="cert-media" style="background: #E8F7FA;">
-          <img src="pmi_kickoff_badge.png" alt="PMI Kickoff Predictive Badge" style="max-height: 80%;">
-        </div>
-        <div class="cert-info">
-          <div>
-            <div class="cert-issuer">PMI &middot; Project Management Institute</div>
-            <h3 class="cert-name">PMI Kickoff &mdash; Predictive Methodologies</h3>
-          </div>
-          <a href="https://www.credly.com/users/shipra.45429c41/badges/credly" target="_blank" rel="noopener" class="cert-link">Verify on Credly &rarr;</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- AWARDS & ACHIEVEMENTS -->
-<section id="awards" class="section-padding awards-section">
-  <div class="container">
-    <div class="sec-header">
-      <span class="sec-num">05 / Recognition</span>
-      <h2 class="sec-title">Awards &amp; Achievements</h2>
-      <p class="sec-subtitle">Demonstrated excellence in national innovation challenges and competitive problem-solving.</p>
-    </div>
-
-    <div class="awards-grid">
-      <!-- 1. Ideathon Certificate -->
-      <div class="award-item">
-        <div class="award-image-wrap">
-          <img src="ideathon_cert.jpeg" alt="ThingQbator Ideathon 2nd Position Certificate">
-        </div>
-        <div class="award-details">
-          <span class="award-tag">2nd Position &middot; Runner-up</span>
-          <h3 class="award-item-title">Certificate of Achievement</h3>
-          <p class="award-desc">Cisco ThingQbator Ideathon &middot; Nasscom Foundation &middot; Innovation Mela 2025 at Digital University Kerala.</p>
-        </div>
-      </div>
-
-      <!-- 2. Award Ceremony -->
-      <div class="award-item">
-        <div class="award-image-wrap">
-          <img src="award_ceremony.jpg" alt="Award Ceremony Presentation">
-        </div>
-        <div class="award-details">
-          <span class="award-tag">Honor &middot; Ceremony</span>
-          <h3 class="award-item-title">Ideathon: Idea for Impact</h3>
-          <p class="award-desc">Receiving the Runner-up recognition prize at the thingQbator Innovation Mela 2025 ceremony.</p>
-        </div>
-      </div>
-
-      <!-- 3. Award Voucher -->
-      <div class="award-item">
-        <div class="award-image-wrap">
-          <img src="award_cheque.jpg" alt="Recognition Voucher">
-        </div>
-        <div class="award-details">
-          <span class="award-tag">Prize &middot; Grant</span>
-          <h3 class="award-item-title">Recognition Voucher</h3>
-          <p class="award-desc">Awarded Amazon prize voucher in honor of distinguished prototype presentation and impact potential.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT SECTION -->
-<section id="contact" class="contact-section">
-  <div class="container">
-    <div class="contact-box">
-      <span class="sec-num">06 / Contact</span>
-      <h2 class="contact-lead">Let&rsquo;s Connect.</h2>
-      <p class="contact-text">
-        Whether you are interested in bioinformatics research collaborations, genomic modeling, data science opportunities, or academic inquiries, I would welcome the conversation.
-      </p>
-
-      <a href="mailto:shiprachoubey540@gmail.com" class="email-button">
-        shiprachoubey540@gmail.com &rarr;
-      </a>
-
-      <div class="contact-links-row">
-        <a href="https://www.linkedin.com/in/shipra-choubey-87aa95207/" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/shiprachoubey540-bit" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://www.credly.com/users/shipra.45429c41/badges/credly" target="_blank" rel="noopener">Credly</a>
-        <a href="Shipra_BIOinfResume_ATS.pdf" target="_blank">Download Resume</a>
-      </div>
-
-      <div class="site-footer">
-        <span>Shipra &copy; 2026. All rights reserved.</span>
-        <span>Bioinformatics &middot; Data Science &middot; Computational Biology</span>
-      </div>
-    </div>
-  </div>
-</section>
+</div>
 
 <script>
-// Smooth scroll offset handling
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      const navOffset = 84;
-      const targetPos = target.getBoundingClientRect().top + window.pageYOffset - navOffset;
-      window.scrollTo({
-        top: targetPos,
-        behavior: 'smooth'
-      });
-    }
+const slider = document.getElementById('mainSlider');
+const slides = document.querySelectorAll('.slide-panel');
+const navItems = document.querySelectorAll('.nav-item');
+const dots = document.querySelectorAll('.pagination-dot');
+const counter = document.getElementById('slideCounter');
+const totalSlides = slides.length;
+let currentIndex = 0;
+
+function updateUI(index) {
+  currentIndex = index;
+
+  // Update nav links active state
+  navItems.forEach((btn, i) => {
+    btn.classList.toggle('active', i === index);
   });
+
+  // Update pagination dots
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === index);
+  });
+
+  // Update counter display
+  const currentFormatted = String(index + 1).padStart(2, '0');
+  const totalFormatted = String(totalSlides).padStart(2, '0');
+  counter.textContent = `${currentFormatted} / ${totalFormatted}`;
+
+  // Hide/Show Arrow buttons at bounds
+  const prevBtn = document.getElementById('prevSlideBtn');
+  const nextBtn = document.getElementById('nextSlideBtn');
+  if (prevBtn) prevBtn.style.opacity = index === 0 ? '0.35' : '1';
+  if (nextBtn) nextBtn.style.opacity = index === totalSlides - 1 ? '0.35' : '1';
+}
+
+function goToSlide(index) {
+  if (index < 0) index = 0;
+  if (index >= totalSlides) index = totalSlides - 1;
+  
+  const targetSlide = slides[index];
+  if (targetSlide) {
+    slider.scrollTo({
+      left: targetSlide.offsetLeft,
+      behavior: 'smooth'
+    });
+  }
+
+  // Close mobile menu if open
+  document.querySelector('.nav-links').classList.remove('active');
+  updateUI(index);
+}
+
+function navigateSlide(direction) {
+  goToSlide(currentIndex + direction);
+}
+
+// Track horizontal scroll position with debounce
+let scrollTimeout;
+slider.addEventListener('scroll', () => {
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    const scrollLeft = slider.scrollLeft;
+    const slideWidth = slider.clientWidth;
+    const newIndex = Math.round(scrollLeft / slideWidth);
+    if (newIndex !== currentIndex && newIndex >= 0 && newIndex < totalSlides) {
+      updateUI(newIndex);
+    }
+  }, 60);
+}, { passive: true });
+
+// Keyboard Arrow Navigation (Left / Right)
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') {
+    navigateSlide(1);
+  } else if (e.key === 'ArrowLeft') {
+    navigateSlide(-1);
+  }
 });
 
-// Mobile menu toggle
-const toggleBtn = document.querySelector('.mobile-toggle');
-const navLinks = document.querySelector('.nav-links');
-if (toggleBtn && navLinks) {
-  toggleBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-  });
-}
+// Initialize first slide state
+updateUI(0);
 </script>
 </body>
 </html>
